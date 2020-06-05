@@ -9,7 +9,7 @@
 
 This repository contains Android [releases](https://github.com/combateafraude/Android/wiki/Downloading-and-importing) and [documentation](https://github.com/combateafraude/Android/wiki) of Combate à Fraude's SDKs.
 
-| SDK | Goal | Example | Documentation |
+| SDK | Goal | Example | Integrating |
 | :--: | :--: | :--: | :--: |
 | Onboarding | Plug-and-play integration with DocumentDetector, one of the FaceLiveness and out [API](https://docs.combateafraude.com/docs/conhecendo-produto/visao-geral/) |  | [Documentation](https://github.com/combateafraude/Android/wiki/Onboarding) |
 | DocumentDetector        | Capture RG, CNH, RNE, OAB and Identidade Militar with assurance and great quality for OCR |  | [Documentation](https://github.com/combateafraude/Android/wiki/DocumentDetector) |
