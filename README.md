@@ -12,7 +12,7 @@ This repository contains Android [releases](https://github.com/combateafraude/An
 | SDK | Goal | Example | Integrating |
 | :--: | :--: | :--: | :--: |
 | Onboarding | Plug-and-play integration with DocumentDetector, one of the FaceLiveness and out [API](https://docs.combateafraude.com/docs/conhecendo-produto/visao-geral/) |  | [Documentation](https://github.com/combateafraude/Android/wiki/Onboarding) |
-| DocumentDetector        | Capture RG, CNH, RNE, OAB and Identidade Militar with assurance and great quality for OCR |  | [Documentation](https://github.com/combateafraude/Android/wiki/DocumentDetector) |
+| DocumentDetector        | Capture RG, CNH, RNE, OAB and Identidade Militar with assurance and great quality for OCR | <img src="/resources/DocumentDetector.gif"> | [Documentation](https://github.com/combateafraude/Android/wiki/DocumentDetector) |
 | PassiveFaceLiveness     | Camera that capture a reliable selfie using AI |  | [Documentation](https://github.com/combateafraude/Android/wiki/PassiveFaceLiveness) |
 | ActiveFaceLiveness      | Camera that capture a reliable selfie using facial movements |  | [Documentation](https://github.com/combateafraude/Android/wiki/ActiveFaceLiveness) |
 | FaceAuthenticator       | Facematch between the registered photo and the user that are holding the device |  | [Documentation](https://github.com/combateafraude/Android/wiki/FaceAuthenticator) |
