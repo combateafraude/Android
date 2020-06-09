@@ -12,6 +12,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+
+        // Add the combateafraude's repository for android binaries
+        maven { url 'https://repo.combateafraude.com/android/release' }
     }
 }
 
