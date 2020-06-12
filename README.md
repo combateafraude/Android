@@ -7,7 +7,7 @@
 
 <hr>
 
-This repository contains Android [releases](https://github.com/combateafraude/Android/wiki/Downloading-and-importing) and [documentation](https://github.com/combateafraude/Android/wiki) of Combate à Fraude's SDKs.
+This repository contains Android [releases](https://github.com/combateafraude/Android/wiki/Downloading-and-importing), [documentation](https://github.com/combateafraude/Android/wiki) and a [sample](https://github.com/combateafraude/Android/example) of Combate à Fraude's SDKs.
 
 | SDK | Goal | Example | Integrating |
 | :--: | :--: | :--: | :--: |
