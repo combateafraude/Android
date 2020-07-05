@@ -19,5 +19,5 @@ This repository contains Android [releases](https://github.com/combateafraude/An
 | [PassiveFaceLiveness](https://github.com/combateafraude/Android/wiki/PassiveFaceLiveness) | Camera that capture a reliable selfie using AI | <img src="/resources/PassiveFaceLiveness.gif"> |
 | [ActiveFaceLiveness](https://github.com/combateafraude/Android/wiki/ActiveFaceLiveness) | Camera that capture a reliable selfie using facial movements | <img src="/resources/ActiveFaceLiveness.gif"> |
 | [FaceAuthenticator](https://github.com/combateafraude/Android/wiki/FaceAuthenticator) | Facematch between the registered photo and the user that are holding the device | <img src="/resources/FaceAuthenticator.gif"> |
-| [DeviceAuthenticator](https://github.com/combateafraude/Android/wiki/DeviceAuthenticator) | Prevent unknown or dangerous devices to use your application | soon |
+| [DeviceAuthenticator](https://github.com/combateafraude/Android/wiki/DeviceAuthenticator) | Prevent unknown or dangerous devices to use your application | No visual illustration :( |
 | [AddressCheck](https://github.com/combateafraude/Android/wiki/AddressCheck) | Inform you if the registered user address is trustworthy | soon |
