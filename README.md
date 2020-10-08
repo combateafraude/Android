@@ -7,7 +7,5 @@
 
 <hr>
 
-## [Releases](https://repo.combateafraude.com)
-## [Documentation](https://docs.combateafraude.com/docs/mobile/android/getting-started/)
-## [Code example](https://github.com/combateafraude/Android/tree/master/example)
-## [Demonstration](https://www.youtube.com/watch?v=HdTzIvI0FRc)
+- [Documentação e últimas versões](https://docs.combateafraude.com/docs/mobile/android/getting-started/)
+- [Demonstrações](https://www.youtube.com/channel/UCTiFK4bKZdSY1yBFAIbrADg)
