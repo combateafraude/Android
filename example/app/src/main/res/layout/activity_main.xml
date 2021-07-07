@@ -8,37 +8,43 @@
 
     <Button
         android:id="@+id/passiveFaceLiveness"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="108dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="#474747"
         android:onClick="passiveFaceLiveness"
         android:text="PassiveFaceLiveness"
         android:textSize="12sp"
+        app:iconTint="#474747"
         app:layout_constraintStart_toEndOf="@+id/documentDetector"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <Button
         android:id="@+id/documentDetector"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="108dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:backgroundTint="#474747"
         android:onClick="documentDetector"
         android:text="DocumentDetector"
         android:textSize="12sp"
+        app:iconTint="#474747"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <Button
         android:id="@+id/faceAuthenticator"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:backgroundTint="#474747"
         android:onClick="faceAuthenticator"
         android:text="FaceAuthenticator"
         android:textSize="12sp"
+        app:iconTint="#474747"
         app:layout_constraintTop_toBottomOf="@+id/passiveFaceLiveness"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp" />
+        tools:layout_editor_absoluteX="-16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
