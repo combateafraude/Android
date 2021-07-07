@@ -6,13 +6,45 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/passiveFaceLiveness"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="#474747"
+        android:onClick="passiveFaceLiveness"
+        android:text="PassiveFaceLiveness"
+        android:textSize="12sp"
+        app:iconTint="#474747"
+        app:layout_constraintStart_toEndOf="@+id/documentDetector"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/documentDetector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:backgroundTint="#474747"
+        android:onClick="documentDetector"
+        android:text="DocumentDetector"
+        android:textSize="12sp"
+        app:iconTint="#474747"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/faceAuthenticator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:backgroundTint="#474747"
+        android:onClick="faceAuthenticator"
+        android:text="FaceAuthenticator"
+        android:textSize="12sp"
+        app:iconTint="#474747"
+        app:layout_constraintTop_toBottomOf="@+id/passiveFaceLiveness"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="-16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
