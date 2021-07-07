@@ -7,35 +7,38 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/documentDetector"
-        android:onClick="documentDetector"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="DocumentDetector"/>
-
-    <Button
         android:id="@+id/passiveFaceLiveness"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="108dp"
         android:onClick="passiveFaceLiveness"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/documentDetector"
-        android:text="PassiveFaceLiveness"/>
+        android:text="PassiveFaceLiveness"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/documentDetector"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/activeFaceLiveness"
-        android:onClick="activeFaceLiveness"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/passiveFaceLiveness"
-        android:text="ActiveFaceLiveness"/>
+        android:id="@+id/documentDetector"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="108dp"
+        android:onClick="documentDetector"
+        android:text="DocumentDetector"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <Button
         android:id="@+id/faceAuthenticator"
-        android:onClick="faceAuthenticator"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/activeFaceLiveness"
-        android:text="FaceAuthenticator"/>
+        android:layout_height="200dp"
+        android:onClick="faceAuthenticator"
+        android:text="FaceAuthenticator"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@+id/passiveFaceLiveness"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
