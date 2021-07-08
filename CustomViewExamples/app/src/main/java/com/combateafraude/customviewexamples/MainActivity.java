@@ -32,23 +32,25 @@ import com.combateafraude.passivefaceliveness.output.PassiveFaceLivenessResult;
 
 public class MainActivity extends AppCompatActivity {
 
-    // The CAF mobile_token, needed to start the SDKs. To request one, mail to daniel.seitenfus@combateafraude.com
     private static final String MOBILE_TOKEN = "INSERT_YOUR_MOBILE_TOKEN";
+    // The CAF mobile_token, needed to start the SDKs. To request one, mail to daniel.seitenfus@combateafraude.com
 
     // The registered CPF used in face authenticator
     private static final String CPF = "INSERT_YOUR_CPF";
 
+    String CNH_front = "Frente da sua CNH";
+
     // The default flow to scan a front and a back of CNH
     private static final DocumentDetectorStep[] CNH_FLOW = new DocumentDetectorStep[]{
-            new DocumentDetectorStep(Document.CNH_FRONT),
-            new DocumentDetectorStep(Document.CNH_BACK)
+            new DocumentDetectorStep(Document.CNH_FRONT).setStepLabel(R.string.CNH_Front),
+            new DocumentDetectorStep(Document.CNH_BACK).setStepLabel(R.string.CNH_Back)
             //You can also set another configuration that can be acessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
     };
 
     // The default flow to scan a front and a back of RG
     private static final DocumentDetectorStep[] RG_FLOW = new DocumentDetectorStep[]{
-            new DocumentDetectorStep(Document.RG_FRONT),
-            new DocumentDetectorStep(Document.RG_BACK)
+            new DocumentDetectorStep(Document.RG_FRONT).setStepLabel(R.string.RG_Front),
+            new DocumentDetectorStep(Document.RG_BACK).setStepLabel(R.string.RG_Back)
             //You can also set another configuration that can be acessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
     };
 
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     // except RGs and CNHs. You can create whatever DocumentDetectorFlow you want, just need
     // to pass which Document want to be detected in the parameter
     private static final DocumentDetectorStep[] ONE_GENERIC_DOCUMENT_FLOW = new DocumentDetectorStep[]{
-            new DocumentDetectorStep(Document.OTHERS)
+            new DocumentDetectorStep(Document.OTHERS).setStepLabel(R.string.OTHER_Document)
             //You can also set another configuration that can be acessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
     };
 
@@ -79,20 +81,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //setting messages to the documentDetector
-    MessageSettings VerificandoQualidade = new MessageSettings().setVerifyingQualityMessage("Estamos verificando a qualidade do documento");
 
     /**
      * The DocumentDetector SDK is usually called in an onboarding flow of some app that requires the user documents. Why not call it instead of calling a native camera to ensure the quality and a real document photo?
      */
     public void documentDetector(View view) {
+
+        //setting messages to the documentDetector
+        MessageSettings documentQuality = new MessageSettings().setVerifyingQualityMessage("Estamos verificando a qualidade do documento")
+                .setFitTheDocumentMessage("Por gentileza encaixe o documento na área marcada");
+
+
         // Create the DocumentDetector parameter
         DocumentDetector documentDetector = new DocumentDetector.Builder(MOBILE_TOKEN)
                 .setDocumentSteps(CNH_FLOW) //use the document you want to process
-                .setLayout(null, R.drawable.document_greenmask,R.drawable.document_whitemask,R.drawable.document_redmask)
+                .setLayout(R.layout.document_detector_template_layout, R.drawable.document_greenmask,R.drawable.document_whitemask,R.drawable.document_redmask)
+                .setMessageSettings(documentQuality)
+                .setStyle(R.style.styleCustom)
                 .showPreview(true,"The picture are ok?","Did you like the picture? Wants to take another one?","Confirm this one","Try Again")
-                .setAutoDetection(false) //Setting the button to take the picture
-                .setMessageSettings(VerificandoQualidade)
                 .build();
         // You can also user another configurations, you can see that we offer here:https://docs.combateafraude.com/docs/mobile/android/document-detector/
 
@@ -104,14 +110,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     /**
      * The PassiveFaceLiveness SDK can replace any selfie capture, with anti spoofing advantage and real selfie capture
      */
     public void passiveFaceLiveness(View view) {
+
+
+        //PassiveFaceLiveness Messages
+        com.combateafraude.passivefaceliveness.input.MessageSettings passiveFaceLivenessMessages = new com.combateafraude.passivefaceliveness.input.MessageSettings().setStepName("Você está no registro Facial")
+                .setFaceTooFarMessage("Por favor \n Aproxime seu rosto")
+                .setFaceTooCloseMessage("Por favor, distâncie seu rosto");
+
+
         // Create the PassiveFaceLiveness parameter
         PassiveFaceLiveness passiveFaceLiveness = new PassiveFaceLiveness.Builder(MOBILE_TOKEN)
-                .setLayout(null, R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
+                .setLayout(R.layout.passive_face_liveness_template_layout, R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
                 .showPreview(true,"The picture are ok?","Did you like the picture? Wants to take another one?","Confirm this one","Try Again")
+                .setMessageSettings(passiveFaceLivenessMessages)
                 .build();
         // You can also user another configurations, you can see that we offer here: https://docs.combateafraude.com/docs/mobile/android/passive-face-liveness/
 
@@ -127,8 +143,9 @@ public class MainActivity extends AppCompatActivity {
     public void faceAuthenticator(View view) {
         // Create the FaceAuthenticator parameter
         FaceAuthenticator faceAuthenticator = new FaceAuthenticator.Builder(MOBILE_TOKEN)
-                .setLayout(null, R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
-                .setPeopleId(CPF) // the CPF that has the registered face in CAF server. To register one, you need to create an execution here: https://docs.combateafraude.com/docs/integracao-api/enviar-documento-analise/
+                .setLayout(R.layout.face_template_layout, R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
+                .setPeopleId(CPF)
+                // the CPF that has the registered face in CAF server. To register one, you need to create an execution here: https://docs.combateafraude.com/docs/integracao-api/enviar-documento-analise/
                 // You can also user another configurations, you can see that we offer here: https://docs.combateafraude.com/docs/mobile/android/face-authenticator/
                 .build();
 
