@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Combate a Fraude Custom View Examples</string>
+
+    <string name="CNH_Front">Frente da sua CNH</string>
+    <string name="CNH_Back">Verso da sua CNH</string>
+    <string name="RG_Front">Frente do seu RG</string>
+    <string name="RG_Back">Verso do seu RG</string>
+    <string name="OTHER_Document">Registro do seu documento</string>
+    <string name="FaceRegistrer">Vamos fazer o registro do seu rosto</string>
 </resources>
