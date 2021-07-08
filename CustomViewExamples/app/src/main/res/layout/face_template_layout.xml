@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewModel"
+            type="com.combateafraude.faceauthenticator.controller.viewmodel.SDKViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:keepScreenOn="true">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.7" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.97" />
+
+        <androidx.camera.view.PreviewView
+            android:id="@id/cameraImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/photo_mask_caf"
+            android:scaleType="fitXY"
+            android:src="@{context.getDrawable(viewModel.maskLayout)}" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/close_caf"
+            android:onClick="@{() -> viewModel.close()}"
+            android:src="@drawable/ic_baseline_arrow_back_24"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintTop_toTopOf="@id/guidelineTop" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:visibility="@{viewModel.buttonVisibility ? View.VISIBLE : View.GONE}"
+            android:onClick="@{() -> viewModel.takePhoto()}"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintTop_toTopOf="@id/guidelineStatus"
+            android:contentDescription="@string/take_picture"
+            app:backgroundTint="@color/colorPrimary"
+            app:tint="@color/colorOnPrimary"
+            app:srcCompat="@drawable/ic_camera_caf"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.statusVisibility ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintTop_toTopOf="@id/guidelineStatus">
+
+            <TextView
+                android:id="@+id/statusMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_drawable_text_box"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="7sp"
+                android:padding="10dp"
+                android:text="@{viewModel.statusMessage}"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/triangle_caf"
+                android:rotation="270"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/nothing_caf"
+                app:layout_constraintEnd_toEndOf="@id/statusMessage"
+                app:layout_constraintStart_toStartOf="@id/statusMessage"
+                app:layout_constraintTop_toTopOf="@id/statusMessage"
+                app:layout_constraintBottom_toTopOf="@id/statusMessage" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvCurrentStepName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/tvPreviousStepName"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            android:layout_marginBottom="5dp"
+            android:textSize="18sp"
+            android:textColor="#ffffff"
+            android:letterSpacing="0.06"
+            android:text="@{viewModel.currentStepName}"
+            android:gravity="center_horizontal" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:visibility="@{viewModel.currentStepDone ? View.VISIBLE : View.GONE}"
+            android:contentDescription="@string/check_caf"
+            app:layout_constraintTop_toTopOf="@id/tvCurrentStepName"
+            app:layout_constraintBottom_toBottomOf="@id/tvCurrentStepName"
+            app:layout_constraintEnd_toStartOf="@id/tvCurrentStepName"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_check_caf" />
+
+        <TextView
+            android:id="@+id/tvPreviousStepName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
+            android:textSize="16sp"
+            android:textColor="#66FFFFFF"
+            android:letterSpacing="0.06"
+            android:text="@{viewModel.previousStepName}"
+            android:gravity="center_horizontal" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:visibility="@{viewModel.previousStepDone ? View.VISIBLE : View.GONE}"
+            android:contentDescription="@string/check_caf"
+            app:layout_constraintTop_toTopOf="@id/tvPreviousStepName"
+            app:layout_constraintBottom_toBottomOf="@id/tvPreviousStepName"
+            app:layout_constraintEnd_toStartOf="@id/tvPreviousStepName"
+            android:layout_marginEnd="8dp"
+            android:alpha="0.4"
+            android:src="@drawable/ic_check_caf" />
+
+        <ProgressBar
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/colorPrimary"
+            android:indeterminateTintMode="src_atop"
+            android:visibility="@{viewModel.serverRequesting ? View.VISIBLE : View.GONE}"
+            app:layout_constraintVertical_bias="0.45"
+            app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
+            app:layout_constraintTop_toTopOf="@id/guidelineTop"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
