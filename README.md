@@ -13,5 +13,5 @@ Este repositório contém exemplos de integração com nossos SDK's Android. Cad
 | :--: | :--: |
 | [Simple Integration Example](https://github.com/combateafraude/Android/tree/master/example) | Demonstra o processo mais básico de integração, com as configurações default do SDK. |
 
-- [Documentação e últimas versões]https://docs.combateafraude.com/docs/mobile/introduction/home/)
+- [Documentação e últimas versões](https://docs.combateafraude.com/docs/mobile/introduction/home/)
 - [Demonstrações](https://www.youtube.com/channel/UCTiFK4bKZdSY1yBFAIbrADg)
