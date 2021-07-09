@@ -137,11 +137,13 @@
                 android:background="@drawable/triangle_caf"
                 android:rotation="270"
                 android:adjustViewBounds="true"
+                android:backgroundTint="@color/colorPrimary"
                 android:contentDescription="@string/nothing_caf"
                 app:layout_constraintEnd_toEndOf="@id/statusMessage"
                 app:layout_constraintStart_toStartOf="@id/statusMessage"
                 app:layout_constraintTop_toTopOf="@id/statusMessage"
-                app:layout_constraintBottom_toTopOf="@id/statusMessage" />
+                app:layout_constraintBottom_toTopOf="@id/statusMessage"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -120,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/triangle_caf"
                 android:rotation="270"
+                android:backgroundTint="@color/colorPrimary"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/nothing_caf"
                 app:layout_constraintEnd_toEndOf="@id/statusMessage"
