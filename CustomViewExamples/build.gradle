@@ -1,0 +1,27 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.2.1"
+        
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        // Add the CAF maven repository to get android binaries
+        maven { url 'https://repo.combateafraude.com/android/release' }
+
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

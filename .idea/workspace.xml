@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="27f2ed47-28e0-477f-9962-abf0718876bd" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1uzrGiicEpLx45YdRC4m6qBUXQK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="27f2ed47-28e0-477f-9962-abf0718876bd" name="Default Changelist" comment="" />
+      <created>1625679166049</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1625679166049</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="-903" y="139" key="FileChooserDialogImpl" timestamp="1625679344733">
+      <screen x="-1366" y="0" width="1366" height="768" />
+    </state>
+    <state x="-903" y="139" key="FileChooserDialogImpl/0.0.1366.768/-1366.0.1366.768@-1366.0.1366.768" timestamp="1625679344733" />
+    <state x="-959" y="86" key="RollbackChangesDialog" timestamp="1625679675300">
+      <screen x="-1366" y="0" width="1366" height="768" />
+    </state>
+    <state x="-959" y="86" key="RollbackChangesDialog/0.0.1366.768/-1366.0.1366.768@-1366.0.1366.768" timestamp="1625679675300" />
+    <state x="-1182" y="29" key="SettingsEditor" timestamp="1625679233346">
+      <screen x="-1366" y="0" width="1366" height="768" />
+    </state>
+    <state x="-1182" y="29" key="SettingsEditor/0.0.1366.768/-1366.0.1366.768@-1366.0.1366.768" timestamp="1625679233346" />
+  </component>
+</project>
