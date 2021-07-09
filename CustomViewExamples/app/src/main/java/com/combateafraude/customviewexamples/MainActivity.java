@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     // The registered CPF used in face authenticator
     private static final String CPF = "INSERT_YOUR_CPF";
 
-    String CNH_front = "Frente da sua CNH";
 
     // The default flow to scan a front and a back of CNH
     private static final DocumentDetectorStep[] CNH_FLOW = new DocumentDetectorStep[]{
@@ -88,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
     public void documentDetector(View view) {
 
         //setting messages to the documentDetector
-        MessageSettings documentQuality = new MessageSettings().setVerifyingQualityMessage("Estamos verificando a qualidade do documento")
+        MessageSettings messageSettingsDocDetec = new MessageSettings()
+                .setVerifyingQualityMessage("Estamos verificando a qualidade do documento")
                 .setFitTheDocumentMessage("Por gentileza encaixe o documento na área marcada");
 
 
@@ -96,9 +96,9 @@ public class MainActivity extends AppCompatActivity {
         DocumentDetector documentDetector = new DocumentDetector.Builder(MOBILE_TOKEN)
                 .setDocumentSteps(CNH_FLOW) //use the document you want to process
                 .setLayout(R.layout.document_detector_template_layout, R.drawable.document_greenmask,R.drawable.document_whitemask,R.drawable.document_redmask)
-                .setMessageSettings(documentQuality)
+                .setMessageSettings(messageSettingsDocDetec)
                 .setStyle(R.style.styleCustom)
-                .showPreview(true,"The picture are ok?","Did you like the picture? Wants to take another one?","Confirm this one","Try Again")
+                .showPreview(true,"Como está a foto?","A foto está boa ou você deseja outra foto?","Enviar esta","Tirar outra")
                 .build();
         // You can also user another configurations, you can see that we offer here:https://docs.combateafraude.com/docs/mobile/android/document-detector/
 
@@ -118,16 +118,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         //PassiveFaceLiveness Messages
-        com.combateafraude.passivefaceliveness.input.MessageSettings passiveFaceLivenessMessages = new com.combateafraude.passivefaceliveness.input.MessageSettings().setStepName("Você está no registro Facial")
-                .setFaceTooFarMessage("Por favor \n Aproxime seu rosto")
+        com.combateafraude.passivefaceliveness.input.MessageSettings messageSettingsPassive = new com.combateafraude.passivefaceliveness.input.MessageSettings()
+                .setStepName("Você está no registro Facial")
+                .setFaceTooFarMessage("Por favor, Aproxime seu rosto")
                 .setFaceTooCloseMessage("Por favor, distâncie seu rosto");
 
 
         // Create the PassiveFaceLiveness parameter
         PassiveFaceLiveness passiveFaceLiveness = new PassiveFaceLiveness.Builder(MOBILE_TOKEN)
                 .setLayout(R.layout.passive_face_liveness_template_layout, R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
-                .showPreview(true,"The picture are ok?","Did you like the picture? Wants to take another one?","Confirm this one","Try Again")
-                .setMessageSettings(passiveFaceLivenessMessages)
+                .showPreview(true,"Como está a foto?","A foto está boa ou você deseja outra foto?","Enviar esta","Tirar outra")
+                .setMessageSettings(messageSettingsPassive)
                 .build();
         // You can also user another configurations, you can see that we offer here: https://docs.combateafraude.com/docs/mobile/android/passive-face-liveness/
 
@@ -165,27 +166,15 @@ public class MainActivity extends AppCompatActivity {
             switch (requestCode) {
                 case DOCUMENT_DETECTOR_CODE:
                     DocumentDetectorResult documentDetectorResult = (DocumentDetectorResult) data.getSerializableExtra(DocumentDetectorResult.PARAMETER_NAME);
-                    if (documentDetectorResult != null) {
-                        postDocumentDetector(documentDetectorResult);
-                    } else {
-                        Toast.makeText(this, "Should never get here!", Toast.LENGTH_SHORT).show();
-                    }
+                    postDocumentDetector(documentDetectorResult);
                     break;
                 case PASSIVE_FACE_LIVENESS_CODE:
                     PassiveFaceLivenessResult passiveFaceLivenessResult = (PassiveFaceLivenessResult) data.getSerializableExtra(PassiveFaceLivenessResult.PARAMETER_NAME);
-                    if (passiveFaceLivenessResult != null) {
-                        postPassiveFaceLiveness(passiveFaceLivenessResult);
-                    } else {
-                        Toast.makeText(this, "Should never get here!", Toast.LENGTH_SHORT).show();
-                    }
+                    postPassiveFaceLiveness(passiveFaceLivenessResult);
                     break;
                 case FACE_AUTHENTICATOR:
                     FaceAuthenticatorResult faceAuthenticatorResult = (FaceAuthenticatorResult) data.getSerializableExtra(FaceAuthenticatorResult.PARAMETER_NAME);
-                    if (faceAuthenticatorResult != null) {
-                        postFaceAuthenticator(faceAuthenticatorResult);
-                    } else {
-                        Toast.makeText(this, "Should never get here!", Toast.LENGTH_SHORT).show();
-                    }
+                    postFaceAuthenticator(faceAuthenticatorResult);
                     break;
             }
         } else {
@@ -197,62 +186,77 @@ public class MainActivity extends AppCompatActivity {
     //You also have the reasons for failures that can be acessed on our documentation: https://docs.combateafraude.com/docs/mobile/android/sdk-failure/
     //Failures that can happen using DocumentDetector's SDK
     private void postDocumentDetector(DocumentDetectorResult documentDetectorResult) {
-        SDKFailure sdkFailure = documentDetectorResult.getSdkFailure();
-        if (sdkFailure == null) {
-            Toast.makeText(this, "SDK successfully finished", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof InvalidTokenReason) {
-            Toast.makeText(this, "Invalid token", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof PermissionReason) {
-            Toast.makeText(this, "One or more permission is missing:" + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof NetworkReason) {
-            Toast.makeText(this, "You don't have internet or the request exceeded the timeout", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof ServerReason) {
-            Toast.makeText(this, "There is some server error. Please, notify us: " + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof StorageReason) {
-            Toast.makeText(this, "The SDK couldn't save the image because the device doesn't have enough space", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof LibraryReason) {
-            Toast.makeText(this, "One internal library failed to execute: " + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
+
+        if (documentDetectorResult != null) {
+            SDKFailure sdkFailure = documentDetectorResult.getSdkFailure();
+            if (sdkFailure == null) {
+                toastMessages("SDK successfully finished");
+            } else if (sdkFailure instanceof InvalidTokenReason) {
+                toastMessages("Invalid token");
+            } else if (sdkFailure instanceof PermissionReason) {
+                toastMessages("One or more permission is missing:" + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof NetworkReason) {
+                toastMessages("You don't have internet or the request exceeded the timeout");
+            } else if (sdkFailure instanceof ServerReason) {
+                toastMessages("There is some server error. Please, notify us: " + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof StorageReason) {
+                toastMessages("The SDK couldn't save the image because the device doesn't have enough space");
+            } else if (sdkFailure instanceof LibraryReason) {
+                toastMessages("One internal library failed to execute: " + sdkFailure.getMessage());
+            }
         }
     }
 
     //Failures that can happen using PassiveFaceLiveness's SDK
     private void postPassiveFaceLiveness(PassiveFaceLivenessResult passiveFaceLivenessResult) {
-        com.combateafraude.passivefaceliveness.output.failure.SDKFailure sdkFailure;
-        sdkFailure = passiveFaceLivenessResult.getSdkFailure();
-        if (sdkFailure == null) {
-            Toast.makeText(this, "SDK successfully finished", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.InvalidTokenReason) {
-            Toast.makeText(this, "Invalid token", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.PermissionReason) {
-            Toast.makeText(this, "One or more permission is missing:" + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.NetworkReason) {
-            Toast.makeText(this, "You don't have internet or the request exceeded the timeout", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.ServerReason) {
-            Toast.makeText(this, "There is some server error. Please, notify us: " + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.StorageReason) {
-            Toast.makeText(this, "The SDK couldn't save the image because the device doesn't have enough space", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.LibraryReason) {
-            Toast.makeText(this, "One internal library failed to execute: " + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
+
+        if (passiveFaceLivenessResult != null) {
+            com.combateafraude.passivefaceliveness.output.failure.SDKFailure sdkFailure;
+            sdkFailure = passiveFaceLivenessResult.getSdkFailure();
+            if (sdkFailure == null) {
+                toastMessages("SDK successfully finished");
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.InvalidTokenReason) {
+                toastMessages("Invalid token");
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.PermissionReason) {
+                toastMessages("One or more permission is missing:" + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.NetworkReason) {
+                toastMessages("You don't have internet or the request exceeded the timeout");
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.ServerReason) {
+                toastMessages("There is some server error. Please, notify us: " + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.StorageReason) {
+                toastMessages("The SDK couldn't save the image because the device doesn't have enough space");
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.LibraryReason) {
+                toastMessages("One internal library failed to execute: " + sdkFailure.getMessage());
+            }
         }
     }
 
     //Failures that can happen using FaceAuthenticator's SDK
     private void postFaceAuthenticator(FaceAuthenticatorResult faceAuthenticatorResult) {
-        com.combateafraude.faceauthenticator.output.failure.SDKFailure sdkFailure = faceAuthenticatorResult.getSdkFailure();
-        if (sdkFailure == null) {
-            Toast.makeText(this, "SDK successfully finished. Authenticated? " + faceAuthenticatorResult.isAuthenticated(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.InvalidTokenReason) {
-            Toast.makeText(this, "Invalid token", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.PermissionReason) {
-            Toast.makeText(this, "One or more permission is missing:" + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.NetworkReason) {
-            Toast.makeText(this, "You don't have internet or the request exceeded the timeout", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.ServerReason) {
-            Toast.makeText(this, "There is some server error. Please, notify us: " + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.StorageReason) {
-            Toast.makeText(this, "The SDK couldn't save the image because the device doesn't have enough space", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.LibraryReason) {
-            Toast.makeText(this, "One internal library failed to execute: " + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
+
+        if (faceAuthenticatorResult != null) {
+
+            com.combateafraude.faceauthenticator.output.failure.SDKFailure sdkFailure = faceAuthenticatorResult.getSdkFailure();
+            if (sdkFailure == null) {
+                toastMessages("SDK successfully finished");
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.InvalidTokenReason) {
+                toastMessages("Invalid token");
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.PermissionReason) {
+                toastMessages("One or more permission is missing:" + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.NetworkReason) {
+                toastMessages("You don't have internet or the request exceeded the timeout");
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.ServerReason) {
+                toastMessages("There is some server error. Please, notify us: " + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.StorageReason) {
+                toastMessages("The SDK couldn't save the image because the device doesn't have enough space");
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.LibraryReason) {
+                toastMessages("One internal library failed to execute: " + sdkFailure.getMessage());
+            }
         }
+    }
+
+    //Method just to show the error messages better
+    private void toastMessages (String message){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
