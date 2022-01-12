@@ -90,7 +90,9 @@ public class MainActivity extends AppCompatActivity {
     public void documentDetector(View view) {
         // Create the DocumentDetector parameter
         DocumentDetector documentDetector = new DocumentDetector.Builder(MOBILE_TOKEN)
-                .setDocumentSteps(RG_FLOW).build();
+                .setDocumentSteps(CNH_FLOW)
+                .setUseEmulator(true)
+                .build();
         //set the flow of the document capture. documentSteps is expecting to receive a document declaration. exemple: RG_DECLARATION
         // other optional parameters like style, layout, request timeout, etc. For more information, go to https://docs.combateafraude.com/docs/mobile/android/document-detector/
 
@@ -108,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     public void passiveFaceLiveness(View view) {
         // Create the PassiveFaceLiveness parameter
         PassiveFaceLiveness passiveFaceLiveness = new PassiveFaceLiveness.Builder(MOBILE_TOKEN)
+                .setUseEmulator(true)
                 // other optional parameters like style, layout, request timeout, etc. For more information, go to https://docs.combateafraude.com/docs/mobile/android/passive-face-liveness/
                 .build();
 

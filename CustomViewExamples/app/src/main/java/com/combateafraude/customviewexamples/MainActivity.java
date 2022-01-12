@@ -15,6 +15,7 @@ import com.combateafraude.documentdetector.input.Document;
 import com.combateafraude.documentdetector.input.DocumentDetector;
 import com.combateafraude.documentdetector.input.DocumentDetectorStep;
 import com.combateafraude.documentdetector.input.MessageSettings;
+import com.combateafraude.documentdetector.input.PreviewSettings;
 import com.combateafraude.documentdetector.output.DocumentDetectorResult;
 import com.combateafraude.documentdetector.output.failure.InvalidTokenReason;
 import com.combateafraude.documentdetector.output.failure.LibraryReason;
@@ -88,17 +89,26 @@ public class MainActivity extends AppCompatActivity {
 
         //setting messages to the documentDetector
         MessageSettings messageSettingsDocDetec = new MessageSettings()
-                .setVerifyingQualityMessage("Estamos verificando a qualidade do documento")
-                .setFitTheDocumentMessage("Por gentileza encaixe o documento na área marcada");
+                .setVerifyingQualityMessage(R.string.verifyingQualityMessage)
+                .setFitTheDocumentMessage(R.string.fitTheDocumentMessage);
 
+        PreviewSettings previewSettings = new PreviewSettings(
+                true,
+                this.getString(R.string.preview_Title),
+                this.getString(R.string.preview_SubTitle),
+                this.getString(R.string.preview_Confirm),
+                this.getString(R.string.preview_Retry)
+        );
 
         // Create the DocumentDetector parameter
         DocumentDetector documentDetector = new DocumentDetector.Builder(MOBILE_TOKEN)
                 .setDocumentSteps(CNH_FLOW) //use the document you want to process
-                .setLayout(R.layout.document_detector_template_layout, R.drawable.document_greenmask,R.drawable.document_whitemask,R.drawable.document_redmask)
+                .setLayout(R.layout.document_detector_template_layout)
+                .setMask( R.drawable.document_greenmask,R.drawable.document_whitemask,R.drawable.document_redmask)
                 .setMessageSettings(messageSettingsDocDetec)
                 .setStyle(R.style.styleCustom)
-                .showPreview(true,"Como está a foto?","A foto está boa ou você deseja outra foto?","Enviar esta","Tirar outra")
+                .setUseEmulator(true)
+                .setPreviewSettings(previewSettings)
                 .build();
         // You can also user another configurations, you can see that we offer here:https://docs.combateafraude.com/docs/mobile/android/document-detector/
 
@@ -116,18 +126,28 @@ public class MainActivity extends AppCompatActivity {
      */
     public void passiveFaceLiveness(View view) {
 
+        com.combateafraude.passivefaceliveness.input.PreviewSettings previewSettings = new com.combateafraude.passivefaceliveness.input.PreviewSettings(
+                true,
+                this.getString(R.string.preview_Title),
+                this.getString(R.string.preview_SubTitle),
+                this.getString(R.string.preview_Confirm),
+                this.getString(R.string.preview_Retry)
+        );
+
 
         //PassiveFaceLiveness Messages
         com.combateafraude.passivefaceliveness.input.MessageSettings messageSettingsPassive = new com.combateafraude.passivefaceliveness.input.MessageSettings()
-                .setStepName("Você está no registro Facial")
-                .setFaceTooFarMessage("Por favor, Aproxime seu rosto")
-                .setFaceTooCloseMessage("Por favor, distâncie seu rosto");
+                .setStepName(R.string.pfl_StepName)
+                .setFaceTooFarMessage(R.string.faceTooFarMessage)
+                .setFaceTooCloseMessage(R.string.faceTooCloseMessage);
 
 
         // Create the PassiveFaceLiveness parameter
         PassiveFaceLiveness passiveFaceLiveness = new PassiveFaceLiveness.Builder(MOBILE_TOKEN)
-                .setLayout(R.layout.passive_face_liveness_template_layout, R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
-                .showPreview(true,"Como está a foto?","A foto está boa ou você deseja outra foto?","Enviar esta","Tirar outra")
+                .setLayout(R.layout.passive_face_liveness_template_layout)
+                .setMask(R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
+                .setPreviewSettings(previewSettings)
+                .setUseEmulator(true)
                 .setMessageSettings(messageSettingsPassive)
                 .build();
         // You can also user another configurations, you can see that we offer here: https://docs.combateafraude.com/docs/mobile/android/passive-face-liveness/
@@ -144,7 +164,8 @@ public class MainActivity extends AppCompatActivity {
     public void faceAuthenticator(View view) {
         // Create the FaceAuthenticator parameter
         FaceAuthenticator faceAuthenticator = new FaceAuthenticator.Builder(MOBILE_TOKEN)
-                .setLayout(R.layout.face_template_layout, R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
+                .setLayout(R.layout.face_template_layout)
+                .setMask(R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
                 .setPeopleId(CPF)
                 // the CPF that has the registered face in CAF server. To register one, you need to create an execution here: https://docs.combateafraude.com/docs/integracao-api/enviar-documento-analise/
                 // You can also user another configurations, you can see that we offer here: https://docs.combateafraude.com/docs/mobile/android/face-authenticator/

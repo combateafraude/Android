@@ -50,9 +50,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // Add the CAF SDKs
-    implementation 'com.combateafraude.sdk:document-detector:6.9.5'
-    implementation 'com.combateafraude.sdk:passive-face-liveness:4.7.10'
-    implementation 'com.combateafraude.sdk:face-authenticator:4.3.0'
+    implementation 'com.combateafraude.sdk:document-detector:6.16.5'
+    implementation 'com.combateafraude.sdk:passive-face-liveness:4.16.6'
+    implementation 'com.combateafraude.sdk:face-authenticator:5.0.5'
 
 
 }

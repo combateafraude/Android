@@ -7,4 +7,16 @@
     <string name="RG_Back">Verso do seu RG</string>
     <string name="OTHER_Document">Registro do seu documento</string>
     <string name="FaceRegistrer">Vamos fazer o registro do seu rosto</string>
+
+    <string name="preview_Title">Como está a foto?</string>
+    <string name="preview_SubTitle">A foto está boa ou você deseja outra foto?</string>
+    <string name="preview_Confirm">Enviar esta</string>
+    <string name="preview_Retry">Tirar outra</string>
+
+    <string name="verifyingQualityMessage">Estamos verificando a qualidade do documento</string>
+    <string name="fitTheDocumentMessage">Por gentileza encaixe o documento na área marcada</string>
+
+    <string name="pfl_StepName">Você está no registro Facial</string>
+    <string name="faceTooFarMessage">Por favor, Aproxime seu rosto</string>
+    <string name="faceTooCloseMessage">Por favor, distâncie seu rosto</string>
 </resources>
