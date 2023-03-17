@@ -19,4 +19,6 @@
     <string name="pfl_StepName">Você está no registro Facial</string>
     <string name="faceTooFarMessage">Por favor, Aproxime seu rosto</string>
     <string name="faceTooCloseMessage">Por favor, distâncie seu rosto</string>
+
+    <string name="iv_description">imagem da câmera</string>
 </resources>

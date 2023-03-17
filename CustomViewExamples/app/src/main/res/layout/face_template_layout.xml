@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
 
     <data>
         <import type="android.view.View"/>
@@ -12,6 +11,8 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:keepScreenOn="true">
@@ -71,22 +72,35 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/close_caf"
             android:onClick="@{() -> viewModel.close()}"
-            android:src="@drawable/ic_baseline_arrow_back_24"
+            android:src="@drawable/ic_back_caf"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
             app:layout_constraintTop_toTopOf="@id/guidelineTop" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/switch_camera"
+            android:onClick="@{() -> viewModel.switchCamera()}"
+            android:src="@drawable/ic_camera_switch"
+            android:visibility="@{viewModel.switchCameraButtonVisibility ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintTop_toTopOf="@id/guidelineTop" />
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:visibility="@{viewModel.buttonVisibility ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.manualCaptureButtonVisibility ? View.VISIBLE : View.GONE}"
             android:onClick="@{() -> viewModel.takePhoto()}"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintTop_toTopOf="@id/guidelineStatus"
             android:contentDescription="@string/take_picture"
-            app:backgroundTint="@color/colorPrimary"
-            app:tint="@color/colorOnPrimary"
+            app:backgroundTint="?attr/colorPrimary"
+            app:tint="#FFF"
             app:srcCompat="@drawable/ic_camera_caf"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -101,18 +115,18 @@
                 android:id="@+id/statusMessage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_drawable_text_box"
+                android:background="@drawable/bg_radius_caf"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="7sp"
                 android:padding="10dp"
-                android:text="@{viewModel.statusMessage}"
+                android:layout_marginTop="10dp"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="#606060"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@{viewModel.statusMessage}"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -120,7 +134,6 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/triangle_caf"
                 android:rotation="270"
-                android:backgroundTint="@color/colorPrimary"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/nothing_caf"
                 app:layout_constraintEnd_toEndOf="@id/statusMessage"
@@ -186,9 +199,9 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:indeterminate="true"
-            android:indeterminateTint="@color/colorPrimary"
+            android:indeterminateTint="?attr/colorPrimary"
             android:indeterminateTintMode="src_atop"
-            android:visibility="@{viewModel.serverRequesting ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.loadingStatus ? View.VISIBLE : View.GONE}"
             app:layout_constraintVertical_bias="0.45"
             app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
             app:layout_constraintTop_toTopOf="@id/guidelineTop"

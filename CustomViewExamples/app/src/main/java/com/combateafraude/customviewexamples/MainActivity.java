@@ -17,11 +17,13 @@ import com.combateafraude.documentdetector.input.DocumentDetectorStep;
 import com.combateafraude.documentdetector.input.MessageSettings;
 import com.combateafraude.documentdetector.input.PreviewSettings;
 import com.combateafraude.documentdetector.output.DocumentDetectorResult;
+import com.combateafraude.documentdetector.output.failure.AvailabilityReason;
 import com.combateafraude.documentdetector.output.failure.InvalidTokenReason;
 import com.combateafraude.documentdetector.output.failure.LibraryReason;
 import com.combateafraude.documentdetector.output.failure.NetworkReason;
 import com.combateafraude.documentdetector.output.failure.PermissionReason;
 import com.combateafraude.documentdetector.output.failure.SDKFailure;
+import com.combateafraude.documentdetector.output.failure.SecurityReason;
 import com.combateafraude.documentdetector.output.failure.ServerReason;
 import com.combateafraude.documentdetector.output.failure.StorageReason;
 import com.combateafraude.faceauthenticator.FaceAuthenticatorActivity;
@@ -44,14 +46,14 @@ public class MainActivity extends AppCompatActivity {
     private static final DocumentDetectorStep[] CNH_FLOW = new DocumentDetectorStep[]{
             new DocumentDetectorStep(Document.CNH_FRONT).setStepLabel(R.string.CNH_Front),
             new DocumentDetectorStep(Document.CNH_BACK).setStepLabel(R.string.CNH_Back)
-            //You can also set another configuration that can be acessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
+            //You can also set another configuration that can be accessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
     };
 
     // The default flow to scan a front and a back of RG
     private static final DocumentDetectorStep[] RG_FLOW = new DocumentDetectorStep[]{
             new DocumentDetectorStep(Document.RG_FRONT).setStepLabel(R.string.RG_Front),
             new DocumentDetectorStep(Document.RG_BACK).setStepLabel(R.string.RG_Back)
-            //You can also set another configuration that can be acessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
+            //You can also set another configuration that can be accessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
     };
 
     // A example of generic flow that scan only one generic document (like OAB, Identidade Militar or RNE) -> To user a GENERIC Document user OTHERS,
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     // to pass which Document want to be detected in the parameter
     private static final DocumentDetectorStep[] ONE_GENERIC_DOCUMENT_FLOW = new DocumentDetectorStep[]{
             new DocumentDetectorStep(Document.OTHERS).setStepLabel(R.string.OTHER_Document)
-            //You can also set another configuration that can be acessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
+            //You can also set another configuration that can be accessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
     };
 
 
@@ -107,10 +109,15 @@ public class MainActivity extends AppCompatActivity {
                 .setMask( R.drawable.document_greenmask,R.drawable.document_whitemask,R.drawable.document_redmask)
                 .setMessageSettings(messageSettingsDocDetec)
                 .setStyle(R.style.styleCustom)
+                .setUseDeveloperMode(true)
+                .setUseDebug(true)
+                .setUseAdb(true)
                 .setUseEmulator(true)
+                .setUseRoot(true)
+                //Disabling security detections for test purposes. Take a look here: https://docs.caf.io/sdks/android/getting-started/documentdetector#security-validations
                 .setPreviewSettings(previewSettings)
                 .build();
-        // You can also user another configurations, you can see that we offer here:https://docs.combateafraude.com/docs/mobile/android/document-detector/
+        // You can also user another configurations, you can see that we offer here: https://docs.caf.io/sdks/android/getting-started/documentdetector
 
 
         // Start the DocumentDetectorActivity passing the DocumentDetector object by parameter. The result will be collected in onActivityResult method below
@@ -147,10 +154,15 @@ public class MainActivity extends AppCompatActivity {
                 .setLayout(R.layout.passive_face_liveness_template_layout)
                 .setMask(R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
                 .setPreviewSettings(previewSettings)
+                .setUseDeveloperMode(true)
+                .setUseDebug(true)
+                .setUseAdb(true)
                 .setUseEmulator(true)
+                .setUseRoot(true)
+                //Disabling security detections for test purposes. Take a look here: https://docs.caf.io/sdks/android/getting-started/passivefaceliveness#_e1ds1ilttmda
                 .setMessageSettings(messageSettingsPassive)
                 .build();
-        // You can also user another configurations, you can see that we offer here: https://docs.combateafraude.com/docs/mobile/android/passive-face-liveness/
+        // You can also user another configurations, you can see that we offer here: https://docs.caf.io/sdks/android/getting-started/passivefaceliveness
 
         // Start the PassiveFaceLivenessActivity passing the DocumentDetector object by parameter. The result will be collected in onActivityResult method below
         Intent intent = new Intent(this, PassiveFaceLivenessActivity.class);
@@ -168,7 +180,13 @@ public class MainActivity extends AppCompatActivity {
                 .setMask(R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
                 .setPeopleId(CPF)
                 // the CPF that has the registered face in CAF server. To register one, you need to create an execution here: https://docs.combateafraude.com/docs/integracao-api/enviar-documento-analise/
-                // You can also user another configurations, you can see that we offer here: https://docs.combateafraude.com/docs/mobile/android/face-authenticator/
+                // You can also user another configurations, you can see that we offer here: https://docs.caf.io/sdks/android/getting-started/faceauthenticator
+                .setUseDeveloperMode(true)
+                .setUseDebug(true)
+                .setUseAdb(true)
+                .setUseEmulator(true)
+                .setUseRoot(true)
+                //Disabling security detections for test purposes. Take a look here: https://docs.caf.io/sdks/android/getting-started/faceauthenticator#_nvbnigm4xtcj
                 .build();
 
         // Start the FaceAuthenticatorActivity passing the DocumentDetector object by parameter. The result will be collected in onActivityResult method below
@@ -183,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Discover if the SDK had finished with some result
         if (resultCode == RESULT_OK && data != null) {
-            // Discover what SDK had finished (In case of Using diferents class for which one with won't be necessary)
+            // Discover what SDK had finished (In case of Using different class for which one with won't be necessary)
             switch (requestCode) {
                 case DOCUMENT_DETECTOR_CODE:
                     DocumentDetectorResult documentDetectorResult = (DocumentDetectorResult) data.getSerializableExtra(DocumentDetectorResult.PARAMETER_NAME);
@@ -204,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    //You also have the reasons for failures that can be acessed on our documentation: https://docs.combateafraude.com/docs/mobile/android/sdk-failure/
+    //You also have the reasons for failures that can be accessed on our documentation: https://docs.caf.io/sdks/android/sdks-response
     //Failures that can happen using DocumentDetector's SDK
     private void postDocumentDetector(DocumentDetectorResult documentDetectorResult) {
 
@@ -216,6 +234,8 @@ public class MainActivity extends AppCompatActivity {
                 toastMessages("Invalid token");
             } else if (sdkFailure instanceof PermissionReason) {
                 toastMessages("One or more permission is missing:" + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof AvailabilityReason){
+                //the String sdkFailure.getMessage() contains instructions to the user
             } else if (sdkFailure instanceof NetworkReason) {
                 toastMessages("You don't have internet or the request exceeded the timeout");
             } else if (sdkFailure instanceof ServerReason) {
@@ -224,6 +244,21 @@ public class MainActivity extends AppCompatActivity {
                 toastMessages("The SDK couldn't save the image because the device doesn't have enough space");
             } else if (sdkFailure instanceof LibraryReason) {
                 toastMessages("One internal library failed to execute: " + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof SecurityReason){
+                switch (sdkFailure.getMessage()) {
+                    case "Error 100":
+                        toastMessages("SDK blocking emulated devices.");
+                    case "Error 200":
+                        toastMessages("Blocking of devices with root privileges by the SDK.");
+                    case "Error 300":
+                        toastMessages("Blocking of devices with developer mode active.");
+                    case "Error 400":
+                        toastMessages("Bblocking of devices with Android Debug Bridge enabled.");
+                    case "Error 500":
+                        toastMessages("Blocking of devices with debug mode enabled.");
+                    case "Error 600":
+                        toastMessages("Blocking of devices with fraudulent app signatures.");
+                }
             }
         }
     }
@@ -240,6 +275,8 @@ public class MainActivity extends AppCompatActivity {
                 toastMessages("Invalid token");
             } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.PermissionReason) {
                 toastMessages("One or more permission is missing:" + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.ProxyReason){
+                //the String sdkFailure.getMessage() contains instructions to the user
             } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.NetworkReason) {
                 toastMessages("You don't have internet or the request exceeded the timeout");
             } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.ServerReason) {
@@ -248,6 +285,21 @@ public class MainActivity extends AppCompatActivity {
                 toastMessages("The SDK couldn't save the image because the device doesn't have enough space");
             } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.LibraryReason) {
                 toastMessages("One internal library failed to execute: " + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.SecurityReason){
+                switch (sdkFailure.getMessage()) {
+                    case "Error 100":
+                        toastMessages("SDK blocking emulated devices.");
+                    case "Error 200":
+                        toastMessages("Blocking of devices with root privileges by the SDK.");
+                    case "Error 300":
+                        toastMessages("Blocking of devices with developer mode active.");
+                    case "Error 400":
+                        toastMessages("Bblocking of devices with Android Debug Bridge enabled.");
+                    case "Error 500":
+                        toastMessages("Blocking of devices with debug mode enabled.");
+                    case "Error 600":
+                        toastMessages("Blocking of devices with fraudulent app signatures.");
+                }
             }
         }
     }
@@ -264,6 +316,8 @@ public class MainActivity extends AppCompatActivity {
                 toastMessages("Invalid token");
             } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.PermissionReason) {
                 toastMessages("One or more permission is missing:" + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.InvalidFaceReason){
+                //the String sdkFailure.getMessage() contains instructions to the user
             } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.NetworkReason) {
                 toastMessages("You don't have internet or the request exceeded the timeout");
             } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.ServerReason) {
@@ -272,6 +326,21 @@ public class MainActivity extends AppCompatActivity {
                 toastMessages("The SDK couldn't save the image because the device doesn't have enough space");
             } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.LibraryReason) {
                 toastMessages("One internal library failed to execute: " + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.SecurityReason){
+                switch (sdkFailure.getMessage()) {
+                    case "Error 100":
+                        toastMessages("SDK blocking emulated devices.");
+                    case "Error 200":
+                        toastMessages("Blocking of devices with root privileges by the SDK.");
+                    case "Error 300":
+                        toastMessages("Blocking of devices with developer mode active.");
+                    case "Error 400":
+                        toastMessages("Bblocking of devices with Android Debug Bridge enabled.");
+                    case "Error 500":
+                        toastMessages("Blocking of devices with debug mode enabled.");
+                    case "Error 600":
+                        toastMessages("Blocking of devices with fraudulent app signatures.");
+                }
             }
         }
     }
