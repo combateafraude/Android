@@ -15,11 +15,13 @@ import com.combateafraude.documentdetector.input.Document;
 import com.combateafraude.documentdetector.input.DocumentDetector;
 import com.combateafraude.documentdetector.input.DocumentDetectorStep;
 import com.combateafraude.documentdetector.output.DocumentDetectorResult;
+import com.combateafraude.documentdetector.output.failure.AvailabilityReason;
 import com.combateafraude.documentdetector.output.failure.InvalidTokenReason;
 import com.combateafraude.documentdetector.output.failure.LibraryReason;
 import com.combateafraude.documentdetector.output.failure.NetworkReason;
 import com.combateafraude.documentdetector.output.failure.PermissionReason;
 import com.combateafraude.documentdetector.output.failure.SDKFailure;
+import com.combateafraude.documentdetector.output.failure.SecurityReason;
 import com.combateafraude.documentdetector.output.failure.ServerReason;
 import com.combateafraude.documentdetector.output.failure.StorageReason;
 import com.combateafraude.faceauthenticator.FaceAuthenticatorActivity;
@@ -90,7 +92,11 @@ public class MainActivity extends AppCompatActivity {
     public void documentDetector(View view) {
         // Create the DocumentDetector parameter
         DocumentDetector documentDetector = new DocumentDetector.Builder(MOBILE_TOKEN)
-                .setDocumentSteps(CNH_FLOW)
+                .setDocumentSteps(RG_FLOW)
+                .setUseDebug(true)
+                .setUseAdb(true)
+                .setUseDeveloperMode(true)
+                .setUseRoot(true)
                 .setUseEmulator(true)
                 .build();
         //set the flow of the document capture. documentSteps is expecting to receive a document declaration. exemple: RG_DECLARATION
@@ -110,6 +116,10 @@ public class MainActivity extends AppCompatActivity {
     public void passiveFaceLiveness(View view) {
         // Create the PassiveFaceLiveness parameter
         PassiveFaceLiveness passiveFaceLiveness = new PassiveFaceLiveness.Builder(MOBILE_TOKEN)
+                .setUseDebug(true)
+                .setUseAdb(true)
+                .setUseDeveloperMode(true)
+                .setUseRoot(true)
                 .setUseEmulator(true)
                 // other optional parameters like style, layout, request timeout, etc. For more information, go to https://docs.combateafraude.com/docs/mobile/android/passive-face-liveness/
                 .build();
@@ -127,6 +137,11 @@ public class MainActivity extends AppCompatActivity {
         // Create the FaceAuthenticator parameter
         FaceAuthenticator faceAuthenticator = new FaceAuthenticator.Builder(MOBILE_TOKEN)
                 .setPeopleId(CPF) // the CPF that has the registered face in CAF server. To register one, you need to create an execution here: https://docs.combateafraude.com/docs/integracao-api/enviar-documento-analise/
+                .setUseDebug(true)
+                .setUseAdb(true)
+                .setUseDeveloperMode(true)
+                .setUseRoot(true)
+                .setUseEmulator(true)
                 // other optional parameters like style, layout, request timeout, etc. For more information, go to https://docs.combateafraude.com/docs/mobile/android/face-authenticator/
                 .build();
 
@@ -178,63 +193,128 @@ public class MainActivity extends AppCompatActivity {
     //You also have the reasons for failures that can be acessed on our documentation: https://docs.combateafraude.com/docs/mobile/android/sdk-failure/
     //Failures that can happen using DocumentDetector's SDK
     private void postDocumentDetector(DocumentDetectorResult documentDetectorResult) {
-        SDKFailure sdkFailure = documentDetectorResult.getSdkFailure();
-        if (sdkFailure == null) {
-            Toast.makeText(this, "SDK successfully finished", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof InvalidTokenReason) {
-            Toast.makeText(this, "Invalid token", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof PermissionReason) {
-            Toast.makeText(this, "One or more permission is missing:" + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof NetworkReason) {
-            Toast.makeText(this, "You don't have internet or the request exceeded the timeout", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof ServerReason) {
-            Toast.makeText(this, "There is some server error. Please, notify us: " + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof StorageReason) {
-            Toast.makeText(this, "The SDK couldn't save the image because the device doesn't have enough space", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof LibraryReason) {
-            Toast.makeText(this, "One internal library failed to execute: " + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
+
+        if (documentDetectorResult != null) {
+            SDKFailure sdkFailure = documentDetectorResult.getSdkFailure();
+            if (sdkFailure == null) {
+                toastMessages("SDK successfully finished");
+            } else if (sdkFailure instanceof InvalidTokenReason) {
+                toastMessages("Invalid token");
+            } else if (sdkFailure instanceof PermissionReason) {
+                toastMessages("One or more permission is missing:" + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof AvailabilityReason){
+                //the String sdkFailure.getMessage() contains instructions to the user
+            } else if (sdkFailure instanceof NetworkReason) {
+                toastMessages("You don't have internet or the request exceeded the timeout");
+            } else if (sdkFailure instanceof ServerReason) {
+                toastMessages("There is some server error. Please, notify us: " + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof StorageReason) {
+                toastMessages("The SDK couldn't save the image because the device doesn't have enough space");
+            } else if (sdkFailure instanceof LibraryReason) {
+                toastMessages("One internal library failed to execute: " + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof SecurityReason){
+                switch (sdkFailure.getMessage()) {
+                    case "Error 100":
+                        toastMessages("SDK blocking emulated devices.");
+                    case "Error 200":
+                        toastMessages("Blocking of devices with root privileges by the SDK.");
+                    case "Error 300":
+                        toastMessages("Blocking of devices with developer mode active.");
+                    case "Error 400":
+                        toastMessages("Bblocking of devices with Android Debug Bridge enabled.");
+                    case "Error 500":
+                        toastMessages("Blocking of devices with debug mode enabled.");
+                    case "Error 600":
+                        toastMessages("Blocking of devices with fraudulent app signatures.");
+                }
+            }
         }
     }
 
     //Failures that can happen using PassiveFaceLiveness's SDK
     private void postPassiveFaceLiveness(PassiveFaceLivenessResult passiveFaceLivenessResult) {
-        com.combateafraude.passivefaceliveness.output.failure.SDKFailure sdkFailure;
-        sdkFailure = passiveFaceLivenessResult.getSdkFailure();
-        if (sdkFailure == null) {
-            Toast.makeText(this, "SDK successfully finished", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.InvalidTokenReason) {
-            Toast.makeText(this, "Invalid token", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.PermissionReason) {
-            Toast.makeText(this, "One or more permission is missing:" + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.NetworkReason) {
-            Toast.makeText(this, "You don't have internet or the request exceeded the timeout", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.ServerReason) {
-            Toast.makeText(this, "There is some server error. Please, notify us: " + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.StorageReason) {
-            Toast.makeText(this, "The SDK couldn't save the image because the device doesn't have enough space", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.LibraryReason) {
-            Toast.makeText(this, "One internal library failed to execute: " + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
+
+        if (passiveFaceLivenessResult != null) {
+            com.combateafraude.passivefaceliveness.output.failure.SDKFailure sdkFailure;
+            sdkFailure = passiveFaceLivenessResult.getSdkFailure();
+            if (sdkFailure == null) {
+                toastMessages("SDK successfully finished");
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.InvalidTokenReason) {
+                toastMessages("Invalid token");
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.PermissionReason) {
+                toastMessages("One or more permission is missing:" + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.ProxyReason){
+                //the String sdkFailure.getMessage() contains instructions to the user
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.NetworkReason) {
+                toastMessages("You don't have internet or the request exceeded the timeout");
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.ServerReason) {
+                toastMessages("There is some server error. Please, notify us: " + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.StorageReason) {
+                toastMessages("The SDK couldn't save the image because the device doesn't have enough space");
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.LibraryReason) {
+                toastMessages("One internal library failed to execute: " + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.passivefaceliveness.output.failure.SecurityReason){
+                switch (sdkFailure.getMessage()) {
+                    case "Error 100":
+                        toastMessages("SDK blocking emulated devices.");
+                    case "Error 200":
+                        toastMessages("Blocking of devices with root privileges by the SDK.");
+                    case "Error 300":
+                        toastMessages("Blocking of devices with developer mode active.");
+                    case "Error 400":
+                        toastMessages("Bblocking of devices with Android Debug Bridge enabled.");
+                    case "Error 500":
+                        toastMessages("Blocking of devices with debug mode enabled.");
+                    case "Error 600":
+                        toastMessages("Blocking of devices with fraudulent app signatures.");
+                }
+            }
         }
     }
 
     //Failures that can happen using FaceAuthenticator's SDK
     private void postFaceAuthenticator(FaceAuthenticatorResult faceAuthenticatorResult) {
-        com.combateafraude.faceauthenticator.output.failure.SDKFailure sdkFailure = faceAuthenticatorResult.getSdkFailure();
-        if (sdkFailure == null) {
-            Toast.makeText(this, "SDK successfully finished. Authenticated? " + faceAuthenticatorResult.isAuthenticated(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.InvalidTokenReason) {
-            Toast.makeText(this, "Invalid token", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.PermissionReason) {
-            Toast.makeText(this, "One or more permission is missing:" + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.NetworkReason) {
-            Toast.makeText(this, "You don't have internet or the request exceeded the timeout", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.ServerReason) {
-            Toast.makeText(this, "There is some server error. Please, notify us: " + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.StorageReason) {
-            Toast.makeText(this, "The SDK couldn't save the image because the device doesn't have enough space", Toast.LENGTH_SHORT).show();
-        } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.LibraryReason) {
-            Toast.makeText(this, "One internal library failed to execute: " + sdkFailure.getMessage(), Toast.LENGTH_SHORT).show();
+
+        if (faceAuthenticatorResult != null) {
+
+            com.combateafraude.faceauthenticator.output.failure.SDKFailure sdkFailure = faceAuthenticatorResult.getSdkFailure();
+            if (sdkFailure == null) {
+                toastMessages("SDK successfully finished");
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.InvalidTokenReason) {
+                toastMessages("Invalid token");
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.PermissionReason) {
+                toastMessages("One or more permission is missing:" + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.InvalidFaceReason){
+                //the String sdkFailure.getMessage() contains instructions to the user
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.NetworkReason) {
+                toastMessages("You don't have internet or the request exceeded the timeout");
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.ServerReason) {
+                toastMessages("There is some server error. Please, notify us: " + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.StorageReason) {
+                toastMessages("The SDK couldn't save the image because the device doesn't have enough space");
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.LibraryReason) {
+                toastMessages("One internal library failed to execute: " + sdkFailure.getMessage());
+            } else if (sdkFailure instanceof com.combateafraude.faceauthenticator.output.failure.SecurityReason){
+                switch (sdkFailure.getMessage()) {
+                    case "Error 100":
+                        toastMessages("SDK blocking emulated devices.");
+                    case "Error 200":
+                        toastMessages("Blocking of devices with root privileges by the SDK.");
+                    case "Error 300":
+                        toastMessages("Blocking of devices with developer mode active.");
+                    case "Error 400":
+                        toastMessages("Bblocking of devices with Android Debug Bridge enabled.");
+                    case "Error 500":
+                        toastMessages("Blocking of devices with debug mode enabled.");
+                    case "Error 600":
+                        toastMessages("Blocking of devices with fraudulent app signatures.");
+                }
+            }
         }
+    }
+
+    private void toastMessages (String message){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 }
