@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/switch_caf"
+            android:contentDescription="@string/switch_camera"
             android:onClick="@{() -> viewModel.switchCamera()}"
             android:visibility="@{viewModel.switchCameraButtonVisibility ? View.VISIBLE : View.GONE}"
             android:src="@drawable/ic_camera_switch"
