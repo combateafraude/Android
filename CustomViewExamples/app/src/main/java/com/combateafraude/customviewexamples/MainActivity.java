@@ -35,8 +35,8 @@ import com.combateafraude.passivefaceliveness.output.PassiveFaceLivenessResult;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String MOBILE_TOKEN = "INSERT_YOUR_MOBILE_TOKEN";
-    // The CAF mobile_token, needed to start the SDKs. To request one, mail to daniel.seitenfus@combateafraude.com
+    private static final String MOBILE_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI1ZmMxM2U5MDE2YTgxODAwMDczNzNlMWYifQ._jdY1z1N1dfaFIq88Qk0akEgOk-taH2OxoW3oT1eLl0";
+    // The CAF mobile_token, needed to start the SDKs.
 
     // The registered CPF used in face authenticator
     private static final String CPF = "INSERT_YOUR_CPF";
@@ -46,14 +46,14 @@ public class MainActivity extends AppCompatActivity {
     private static final DocumentDetectorStep[] CNH_FLOW = new DocumentDetectorStep[]{
             new DocumentDetectorStep(Document.CNH_FRONT).setStepLabel(R.string.CNH_Front),
             new DocumentDetectorStep(Document.CNH_BACK).setStepLabel(R.string.CNH_Back)
-            //You can also set another configuration that can be accessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
+            //You can also set another configuration that can be accessed on: https://docs.caf.io/sdks/android/getting-started/documentdetector
     };
 
     // The default flow to scan a front and a back of RG
     private static final DocumentDetectorStep[] RG_FLOW = new DocumentDetectorStep[]{
             new DocumentDetectorStep(Document.RG_FRONT).setStepLabel(R.string.RG_Front),
             new DocumentDetectorStep(Document.RG_BACK).setStepLabel(R.string.RG_Back)
-            //You can also set another configuration that can be accessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
+            //You can also set another configuration that can be accessed on: https://docs.caf.io/sdks/android/getting-started/documentdetector
     };
 
     // A example of generic flow that scan only one generic document (like OAB, Identidade Militar or RNE) -> To user a GENERIC Document user OTHERS,
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     // to pass which Document want to be detected in the parameter
     private static final DocumentDetectorStep[] ONE_GENERIC_DOCUMENT_FLOW = new DocumentDetectorStep[]{
             new DocumentDetectorStep(Document.OTHERS).setStepLabel(R.string.OTHER_Document)
-            //You can also set another configuration that can be accessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
+            //You can also set another configuration that can be accessed on: https://docs.caf.io/sdks/android/getting-started/documentdetector
     };
 
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Request all required permissions to run this example. To check the individual SDK permissions and requested only the individual SDK permissions, please check https://docs.combateafraude.com/docs/mobile/introduction/home/
+        // Request all required permissions to run this example. To check the individual SDK permissions and requested only the individual SDK permissions, please check https://docs.caf.io/sdks/
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, PERMISSIONS_CODE);
 
     }
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         // Create the DocumentDetector parameter
         DocumentDetector documentDetector = new DocumentDetector.Builder(MOBILE_TOKEN)
                 .setDocumentSteps(CNH_FLOW) //use the document you want to process
-                .setLayout(R.layout.document_detector_template_layout)
+                .setLayout(R.layout.document_detector_custom_layout_template)
                 .setMask( R.drawable.document_greenmask,R.drawable.document_whitemask,R.drawable.document_redmask)
                 .setMessageSettings(messageSettingsDocDetec)
                 .setStyle(R.style.styleCustom)
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create the PassiveFaceLiveness parameter
         PassiveFaceLiveness passiveFaceLiveness = new PassiveFaceLiveness.Builder(MOBILE_TOKEN)
-                .setLayout(R.layout.passive_face_liveness_template_layout)
+                .setLayout(R.layout.passive_face_liveness_custom_layout_template)
                 .setMask(R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
                 .setPreviewSettings(previewSettings)
                 .setUseDeveloperMode(true)
@@ -176,10 +176,10 @@ public class MainActivity extends AppCompatActivity {
     public void faceAuthenticator(View view) {
         // Create the FaceAuthenticator parameter
         FaceAuthenticator faceAuthenticator = new FaceAuthenticator.Builder(MOBILE_TOKEN)
-                .setLayout(R.layout.face_template_layout)
+                .setLayout(R.layout.face_auth_custom_layout_template)
                 .setMask(R.drawable.face_greenmask,R.drawable.face_whitemask,R.drawable.face_redmask)
                 .setPeopleId(CPF)
-                // the CPF that has the registered face in CAF server. To register one, you need to create an execution here: https://docs.combateafraude.com/docs/integracao-api/enviar-documento-analise/
+                // the CPF that has the registered face in CAF server. To register one, you need to create an execution here: https://docs.caf.io/api/mobile-api/available-resources/face-registration
                 // You can also user another configurations, you can see that we offer here: https://docs.caf.io/sdks/android/getting-started/faceauthenticator
                 .setUseDeveloperMode(true)
                 .setUseDebug(true)
