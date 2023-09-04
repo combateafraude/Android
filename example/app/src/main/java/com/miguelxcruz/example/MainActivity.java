@@ -1,12 +1,16 @@
 package com.miguelxcruz.example;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.databinding.DataBindingUtil;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,8 +32,14 @@ import com.combateafraude.faceauthenticator.FaceAuthenticatorActivity;
 import com.combateafraude.faceauthenticator.input.FaceAuthenticator;
 import com.combateafraude.faceauthenticator.output.FaceAuthenticatorResult;
 import com.combateafraude.passivefaceliveness.PassiveFaceLivenessActivity;
+import com.combateafraude.passivefaceliveness.input.CafStage;
 import com.combateafraude.passivefaceliveness.input.PassiveFaceLiveness;
 import com.combateafraude.passivefaceliveness.output.PassiveFaceLivenessResult;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.miguelxcruz.example.databinding.ActivityMainBinding;
+import com.miguelxcruz.example.utils.MaskEditText;
+import com.miguelxcruz.example.utils.Utils;
 
 import java.lang.annotation.Documented;
 
@@ -38,11 +48,92 @@ import java.lang.annotation.Documented;
 
 public class MainActivity extends AppCompatActivity {
 
+    // REQUEST_CODES to identify what activity is been started and know which result get in onActivityResult method
+    private static final int DOCUMENT_DETECTOR_CODE = 1;
+    private static final int PASSIVE_FACE_LIVENESS_CODE = 2;
+    private static final int FACE_AUTHENTICATOR = 4;
+
+    // REQUEST_CODE to request permissions
+    private static final int PERMISSIONS_CODE = 5;
+
+    private BottomSheetBehavior<View> sheetBehavior;
+    private ActivityMainBinding binding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        instantiateViews();
+
+        // Request all required permissions to run this example. To check the individual SDK permissions and requested only the individual SDK permissions, please check https://docs.combateafraude.com/docs/mobile/introduction/home/
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, PERMISSIONS_CODE);
+    }
+
+    private void instantiateViews(){
+        binding.etCpf.addTextChangedListener(MaskEditText.mask(binding.etCpf, MaskEditText.CPF));
+        sheetBehavior = BottomSheetBehavior.from(binding.bottomSheet);
+        sheetBehavior.setPeekHeight(0);
+        sheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int i) {
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+                if (v>=0.5){
+                    binding.clOpacity.setVisibility(View.VISIBLE);
+                } else {
+                    binding.clOpacity.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event){
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (sheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED) {
+                Rect outRect = new Rect();
+                binding.bottomSheet.getGlobalVisibleRect(outRect);
+                if(!outRect.contains((int)event.getRawX(), (int)event.getRawY())){
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    binding.clOpacity.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        return super.dispatchTouchEvent(event);
+    }
+
+    public void onClickFaceAuthOptions(View view) {
+        sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        binding.clOpacity.setVisibility(View.VISIBLE);
+        binding.etCpf.requestFocus();
+    }
+
+    public void onClickAuthenticate(View view) {
+        String cpf = binding.etCpf.getText().toString();
+        if (cpf.equals("")){
+            binding.etCpf.setError(getString(R.string.required_field));
+            binding.etCpf.requestFocus();
+            return;
+        }
+        if (!Utils.isCPF(cpf)){
+            binding.etCpf.setError(getString(R.string.incorrect_cpf));
+            binding.etCpf.requestFocus();
+            return;
+        }
+        faceAuthenticator(this.getCurrentFocus(), cpf);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
     // The CAF mobile_token, needed to start the SDKs. To request one, mail to daniel.seitenfus@combateafraude.com
-    private static final String MOBILE_TOKEN = "INSERT_YOUR_MOBILE_TOKEN";
 
     // The registered CPF used in face authenticator
-    private static final String CPF = "INSERT_YOUR_CPF";
+    private static final String personId = "PS-TEST-PROD";
 
     // The default flow to scan a front and a back of CNH
     private static final DocumentDetectorStep[] CNH_FLOW = new DocumentDetectorStep[]{
@@ -66,38 +157,20 @@ public class MainActivity extends AppCompatActivity {
             //You can also set another configuration that can be acessed on: https://docs.combateafraude.com/docs/mobile/android/document-detector/
     };
 
-
-    // REQUEST_CODES to identify what activity is been started and know which result get in onActivityResult method
-    private static final int DOCUMENT_DETECTOR_CODE = 1;
-    private static final int PASSIVE_FACE_LIVENESS_CODE = 2;
-    private static final int FACE_AUTHENTICATOR = 4;
-
-    // REQUEST_CODE to request permissions
-    private static final int PERMISSIONS_CODE = 5;
-
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // Request all required permissions to run this example. To check the individual SDK permissions and requested only the individual SDK permissions, please check https://docs.combateafraude.com/docs/mobile/introduction/home/
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, PERMISSIONS_CODE);
-    }
-
     /**
      * The DocumentDetector SDK is usually called in an onboarding flow of some app that requires the user documents. Why not call it instead of calling a native camera to ensure the quality and a real document photo?
      */
     public void documentDetector(View view) {
         // Create the DocumentDetector parameter
         DocumentDetector documentDetector = new DocumentDetector.Builder(MOBILE_TOKEN)
-                .setDocumentSteps(RG_FLOW)
+                .setPersonId(personId)
+                .setDocumentSteps(CNH_FLOW)
                 .setUseDebug(true)
                 .setUseAdb(true)
                 .setUseDeveloperMode(true)
                 .setUseRoot(true)
                 .setUseEmulator(true)
+                .setStage(com.combateafraude.documentdetector.input.CafStage.PROD)
                 .build();
         //set the flow of the document capture. documentSteps is expecting to receive a document declaration. exemple: RG_DECLARATION
         // other optional parameters like style, layout, request timeout, etc. For more information, go to https://docs.combateafraude.com/docs/mobile/android/document-detector/
@@ -116,11 +189,13 @@ public class MainActivity extends AppCompatActivity {
     public void passiveFaceLiveness(View view) {
         // Create the PassiveFaceLiveness parameter
         PassiveFaceLiveness passiveFaceLiveness = new PassiveFaceLiveness.Builder(MOBILE_TOKEN)
+                .setPersonId(personId)
                 .setUseDebug(true)
                 .setUseAdb(true)
                 .setUseDeveloperMode(true)
                 .setUseRoot(true)
                 .setUseEmulator(true)
+                .setStage(CafStage.PROD)
                 // other optional parameters like style, layout, request timeout, etc. For more information, go to https://docs.combateafraude.com/docs/mobile/android/passive-face-liveness/
                 .build();
 
@@ -133,15 +208,16 @@ public class MainActivity extends AppCompatActivity {
     /**
      * The FaceAuthenticator SDK can be used to increase the security of your app, in addition to verify spoofing photos. Why not call it in a login flow or a money operation?
      */
-    public void faceAuthenticator(View view) {
+    public void faceAuthenticator(View view, String cpf) {
         // Create the FaceAuthenticator parameter
         FaceAuthenticator faceAuthenticator = new FaceAuthenticator.Builder(MOBILE_TOKEN)
-                .setPeopleId(CPF) // the CPF that has the registered face in CAF server. To register one, you need to create an execution here: https://docs.combateafraude.com/docs/integracao-api/enviar-documento-analise/
+                .setPeopleId(cpf) // the CPF that has the registered face in CAF server. To register one, you need to create an execution here: https://docs.combateafraude.com/docs/integracao-api/enviar-documento-analise/
                 .setUseDebug(true)
                 .setUseAdb(true)
                 .setUseDeveloperMode(true)
                 .setUseRoot(true)
                 .setUseEmulator(true)
+                .setStage(com.combateafraude.faceauthenticator.input.CafStage.PROD)
                 // other optional parameters like style, layout, request timeout, etc. For more information, go to https://docs.combateafraude.com/docs/mobile/android/face-authenticator/
                 .build();
 

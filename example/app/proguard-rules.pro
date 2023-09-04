@@ -19,7 +19,3 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
--keep class com.combateafraude.** { *; }
--keep interface com.combateafraude.** { *; }
--keepclassmembers class com.combateafraude.** { *; }

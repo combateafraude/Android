@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Example Combate a Fraude SDK</string>
+    <string name="bottom_tips_fa_title">Which CPF do you want to authenticate to?</string>
+    <string name="bottom_tips_fa_subtitle">We will verify that you are the same person registered on our servers.</string>
+    <string name="authenticate">Authenticate</string>
+
+    <string name="required_field">Required field</string>
+    <string name="incorrect_cpf">Incorrect CPF</string>
 </resources>

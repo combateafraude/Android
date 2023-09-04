@@ -1,50 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Button
-        android:id="@+id/passiveFaceLiveness"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:backgroundTint="#474747"
-        android:onClick="passiveFaceLiveness"
-        android:text="PassiveFaceLiveness"
-        android:textSize="12sp"
-        app:iconTint="#474747"
-        app:layout_constraintStart_toEndOf="@+id/documentDetector"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:background="#00000000">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.1" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.9" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.95" />
+
+        <Button
+            android:id="@+id/passiveFaceLiveness"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="#474747"
+            android:onClick="passiveFaceLiveness"
+            android:text="PassiveFaceLiveness"
+            android:textSize="12sp"
+            app:iconTint="#474747"
+            app:layout_constraintStart_toEndOf="@+id/documentDetector"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    <Button
-        android:id="@+id/documentDetector"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:backgroundTint="#474747"
-        android:onClick="documentDetector"
-        android:text="DocumentDetector"
-        android:textSize="12sp"
-        app:iconTint="#474747"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/documentDetector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:backgroundTint="#474747"
+            android:onClick="documentDetector"
+            android:text="DocumentDetector"
+            android:textSize="12sp"
+            app:iconTint="#474747"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/faceAuthenticator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:backgroundTint="#474747"
-        android:onClick="faceAuthenticator"
-        android:text="FaceAuthenticator"
-        android:textSize="12sp"
-        app:iconTint="#474747"
-        app:layout_constraintTop_toBottomOf="@+id/passiveFaceLiveness"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="-16dp" />
+        <Button
+            android:id="@+id/faceAuthenticator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:backgroundTint="#474747"
+            android:onClick="onClickFaceAuthOptions"
+            android:text="FaceAuthenticator"
+            android:textSize="12sp"
+            app:iconTint="#474747"
+            app:layout_constraintTop_toBottomOf="@+id/passiveFaceLiveness" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clOpacity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="#66000000" />
+
+        <LinearLayout
+            android:id="@+id/bottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bottom_sheet_rounded_corner"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:behavior_hideable="true"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineStart2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.1" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineEnd2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.9" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineTop2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.05" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/ic_bottom_sheet_rectangle"
+                    android:contentDescription="arrow"
+                    app:layout_constraintEnd_toEndOf="@id/guidelineEnd2"
+                    app:layout_constraintStart_toStartOf="@id/guidelineStart2"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvTitle3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:letterSpacing="0.06"
+                    android:text="@string/bottom_tips_fa_title"
+                    android:textColor="#323232"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/guidelineStart2"
+                    app:layout_constraintEnd_toEndOf="@+id/guidelineEnd2"
+                    app:layout_constraintTop_toTopOf="@+id/guidelineTop2" />
+
+                <TextView
+                    android:id="@+id/tvTitle4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="7sp"
+                    android:text="@string/bottom_tips_fa_subtitle"
+                    android:textColor="#606060"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="@id/guidelineStart2"
+                    app:layout_constraintEnd_toEndOf="@+id/guidelineEnd2"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTitle3" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCpf"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:textColorHint="#606060"
+                    app:hintTextColor="#606060"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTitle4"
+                    app:layout_constraintStart_toStartOf="@id/guidelineStart2"
+                    app:layout_constraintEnd_toEndOf="@+id/guidelineEnd2">
+
+                    <EditText
+                        android:id="@+id/etCpf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="CPF"
+                        android:maxLength="14"
+                        android:inputType="number"
+                        android:importantForAutofill="no" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    app:layout_constraintTop_toBottomOf="@+id/tilCpf"
+                    app:layout_constraintStart_toStartOf="@id/guidelineStart2"
+                    app:layout_constraintEnd_toEndOf="@+id/guidelineEnd2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:cornerRadius="20dp"
+                    style="@style/defaultButtonStyle"
+                    android:onClick="onClickAuthenticate"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="@string/authenticate" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
