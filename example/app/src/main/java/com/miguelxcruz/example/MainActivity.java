@@ -131,9 +131,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // The CAF mobile_token, needed to start the SDKs. To request one, mail to daniel.seitenfus@combateafraude.com
-
+    private static final String MOBILE_TOKEN = "";
     // The registered CPF used in face authenticator
-    private static final String personId = "PS-TEST-PROD";
+    private static final String personId = "PS-TEST";
 
     // The default flow to scan a front and a back of CNH
     private static final DocumentDetectorStep[] CNH_FLOW = new DocumentDetectorStep[]{
@@ -170,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
                 .setUseDeveloperMode(true)
                 .setUseRoot(true)
                 .setUseEmulator(true)
-                .setStage(com.combateafraude.documentdetector.input.CafStage.PROD)
                 .build();
         //set the flow of the document capture. documentSteps is expecting to receive a document declaration. exemple: RG_DECLARATION
         // other optional parameters like style, layout, request timeout, etc. For more information, go to https://docs.combateafraude.com/docs/mobile/android/document-detector/
